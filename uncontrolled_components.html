@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Title</title>
+        <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="text/babel">
+            class App extends React.Component {
+                constructor() {
+                    super();
+                    this.myRef = React.createRef();
+                }
+
+                render() {
+                    return (
+                        <div>
+                            <p> Uncontrolled Component </p>
+                            <p>
+                                <input type="text" ref="myinput" />
+                            </p>
+                            <p>
+                                <button
+                                    onClick={() => {
+                                        console.log(this.refs.myinput);
+                                        console.log(this.refs.myinput.value);
+                                    }}
+                                >
+                                    click me
+                                </button>
+                            </p>
+
+                            <p
+                                ref={this.myRef}
+                                onClick={() => {
+                                    console.log(this.myRef);
+                                    console.log(this.myRef.current);
+                                }}
+                            >
+                                this is ref
+                            </p>
+                        </div>
+                    );
+                }
+            }
+
+            ReactDOM.render(<App />, document.getElementById("root"));
+        </script>
+    </body>
+</html>
