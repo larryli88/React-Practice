@@ -34,38 +34,108 @@
                     return (
                         <div>
                             <h1>ToDo App</h1>
-                            <HD />
-                            <BD todoList={this.state.todos} />
+                            <HD addToDo={this.addItem} />
+                            <BD
+                                todoList={this.state.todos}
+                                updateItem={this.updateItem}
+                                deleteItem={this.deleteItem}
+                            />
                             <FT />
                         </div>
                     );
                 }
+                addItem = (item) => {
+                    this.setState({
+                        todos: [
+                            ...this.state.todos,
+                            {
+                                id: Math.floor(Math.random() * 100),
+                                title: item,
+                                done: false,
+                            },
+                        ],
+                    });
+                };
+                updateItem = (id, status) => {
+                    this.setState({
+                        todos: this.state.todos.map((item) =>
+                            item.id === id ? { ...item, done: status } : item
+                        ),
+                    });
+                };
+                deleteItem = (id) => {
+                    this.setState({
+                        todos: this.state.todos.filter(
+                            (item) => item.id !== id
+                        ),
+                    });
+                };
             }
             class HD extends React.Component {
+                constructor() {
+                    super();
+                    // define
+                    this.input = React.createRef();
+                }
                 render() {
-                    return <div>HD</div>;
+                    return (
+                        <div>
+                            <input type="text" ref={this.input} />
+                            <button
+                                onClick={() => {
+                                    // get ref
+                                    const val = this.input.current.value;
+                                    // use callback fn
+                                    this.props.addToDo(val);
+                                }}
+                            >
+                                add new task
+                            </button>
+                        </div>
+                    );
                 }
             }
             class Item extends React.Component {
                 render() {
-                    return(
+                    return (
                         <div>
-                            <input type="checkbox" checked={this.props.data.done}/> 
+                            <input
+                                type="checkbox"
+                                checked={this.props.data.done}
+                                onChange={() => {
+                                    const { data } = this.props;
+                                    this.props.updateHelper(
+                                        data.id,
+                                        !data.done
+                                    );
+                                }}
+                            />
                             <span>{this.props.data.title}</span>
-                            <button>delete</button>
-                            </div>
+                            <button
+                                onClick={() => {
+                                    this.props.deleteHelper(this.props.data.id);
+                                }}
+                            >
+                                delete
+                            </button>
+                        </div>
                     );
                 }
             }
             class BD extends React.Component {
                 render() {
-                    console.log(this.props);
                     return (
                         <div>
                             {this.props.todoList.map((item) => {
-                                console.log(item);
                                 // the 'key' is used for 'diff'
-                                return <Item key={item.id} data={item}/>
+                                return (
+                                    <Item
+                                        key={item.id}
+                                        data={item}
+                                        updateHelper={this.props.updateItem}
+                                        deleteHelper={this.props.deleteItem}
+                                    />
+                                );
                             })}
                         </div>
                     );
