@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="root2"></div>
+
+    <script type="text/babel">
+      // data communication
+      // 1. parent -> child
+      //    props
+      //    step1: parent component -> child component
+      //    step2: use -> child component -> this.props.key
+      class Parent extends React.Component {
+        render() {
+          return (
+            <div>
+              <h1>Parent Component: parent -> child</h1>
+              <hr />
+              {
+                // define data
+              }
+              <Child num={10} />
+            </div>
+          );
+        }
+      }
+
+      class Child extends React.Component {
+        render() {
+          console.log(this.props);
+          return (
+            <div>
+              <h2>Child Component</h2>
+              <p>The value from Parent is {this.props.num}</p>
+            </div>
+          );
+        }
+      }
+      // 2. child -> parent
+      //    callback function
+      //    step1: define -> parent component -> <Child key=value(fn) />
+      //                                     -> define fn body
+      //    step2: pass data -> child component -> this.props.key(fn)(data)
+      class Parent2 extends React.Component {
+        render() {
+          return (
+            <div>
+              <h1>Parent Component: child -> parent</h1>
+              <hr />
+              <Child2 data={10} changeValueFn={this.getValue} />
+            </div>
+          );
+        }
+        getValue = (item) => {
+          console.log(item);
+        };
+      }
+      class Child2 extends React.Component {
+        render() {
+          console.log(this.props);
+          return (
+            <div>
+              <h2>Child Component</h2>
+              <br />
+              <button
+                onClick={() => {
+                  this.props.changeValueFn(100);
+                }}
+              >
+                Click me to pass a value
+              </button>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<Parent />, document.getElementById("root"));
+      ReactDOM.render(<Parent2 />, document.getElementById("root2"));
+    </script>
+  </body>
+</html>
