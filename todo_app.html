@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Todo item update</title>
+        <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+
+        <style>
+            .active {
+                background-color: #23b6ff;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="text/babel">
+            class App extends React.Component {
+                constructor() {
+                    super();
+                    this.state = {
+                        todos: [
+                            { id: 1, title: "task1", done: false },
+                            { id: 2, title: "task2", done: false },
+                            { id: 3, title: "task3", done: true },
+                            { id: 4, title: "task4", done: false },
+                            { id: 5, title: "task5", done: true },
+                            { id: 6, title: "task6", done: false },
+                        ],
+                    };
+                }
+                render() {
+                    return (
+                        <div>
+                            <h1>ToDo App</h1>
+                            <HD />
+                            <BD todoList={this.state.todos} />
+                            <FT />
+                        </div>
+                    );
+                }
+            }
+            class HD extends React.Component {
+                render() {
+                    return <div>HD</div>;
+                }
+            }
+            class Item extends React.Component {
+                render() {
+                    return(
+                        <div>
+                            <input type="checkbox" checked={this.props.data.done}/> 
+                            <span>{this.props.data.title}</span>
+                            <button>delete</button>
+                            </div>
+                    );
+                }
+            }
+            class BD extends React.Component {
+                render() {
+                    console.log(this.props);
+                    return (
+                        <div>
+                            {this.props.todoList.map((item) => {
+                                console.log(item);
+                                // the 'key' is used for 'diff'
+                                return <Item key={item.id} data={item}/>
+                            })}
+                        </div>
+                    );
+                }
+            }
+            class FT extends React.Component {
+                render() {
+                    return <div>FT</div>;
+                }
+            }
+            ReactDOM.render(<App />, document.getElementById("root"));
+        </script>
+    </body>
+</html>

@@ -9,6 +9,7 @@
   </head>
   <body>
     <div id="root"></div>
+    <hr />
     <div id="root2"></div>
 
     <script type="text/babel">
@@ -22,7 +23,6 @@
           return (
             <div>
               <h1>Parent Component: parent -> child</h1>
-              <hr />
               {
                 // define data
               }
@@ -49,17 +49,26 @@
       //                                     -> define fn body
       //    step2: pass data -> child component -> this.props.key(fn)(data)
       class Parent2 extends React.Component {
+          constructor() {
+              super();
+              this.state = {
+                  res: 0
+              }
+          }
         render() {
           return (
             <div>
               <h1>Parent Component: child -> parent</h1>
-              <hr />
-              <Child2 data={10} changeValueFn={this.getValue} />
+              <p>The value from child component is {this.state.res}</p>
+              <Child2 data={this.state.res} changeValueFn={this.getValue} />
             </div>
           );
         }
         getValue = (item) => {
           console.log(item);
+          this.setState({
+              res: item
+          })
         };
       }
       class Child2 extends React.Component {
@@ -71,7 +80,7 @@
               <br />
               <button
                 onClick={() => {
-                  this.props.changeValueFn(100);
+                  this.props.changeValueFn(this.props.data + 100);
                 }}
               >
                 Click me to pass a value
@@ -80,6 +89,8 @@
           );
         }
       }
+      // 3. sibling -> sibling
+      //    lca -> parent component
       ReactDOM.render(<Parent />, document.getElementById("root"));
       ReactDOM.render(<Parent2 />, document.getElementById("root2"));
     </script>
